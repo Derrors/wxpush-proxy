@@ -5,12 +5,10 @@
 ### 1. 部署方式
 docker run -d -p 8300:8300 \
   -e CORP_ID=your_corpid \
-  -e AGENT_ID=your_agentid \
   -e SECRET=your_secret \
   --name wxpush-proxy wxpush-proxy
 
 - CORP_ID: 企业微信的企业 ID
-- AGENT_ID: 应用 ID
 - SECRET: 应用 Secret
 
 
