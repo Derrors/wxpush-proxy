@@ -12,7 +12,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # 设置环境变量（可以用 ENV 指令设置默认值）
 ENV CORP_ID=
-ENV AGENT_ID=
 ENV SECRET=
 
 # 启动 Flask 应用
