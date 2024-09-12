@@ -16,5 +16,5 @@ docker run -d -p 8300:8300 \
 
 ### 2. 使用指南
 docker 部署完成后，提供调用接口：
-* url: POST http://http://ip:port/api/sendMsg
+* url: POST http://ip:port/api/sendMsg
 * 请求体格式与 [发送应用消息](https://developer.work.weixin.qq.com/document/path/90236) 一致。
