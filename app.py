@@ -6,22 +6,13 @@ app = Flask(__name__)
 
 # 从环境变量中获取 corpid, corpsecret
 CORP_ID = os.getenv("CORP_ID", "")
-SECRET = os.getenv("SECRET", "")
-
-# 验证环境变量是否存在
-if not CORP_ID or not SECRET:
-    raise ValueError("CORP_ID and SECRET environment variables must be set")
-
-# 获取 access_token 的 URL
-GET_ACCESS_TOKEN_URL = f"https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid={CORP_ID}&corpsecret={SECRET}"
-
-# 发送消息的 URL
-SEND_URL = "https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token={}"
+if not CORP_ID:
+    raise ValueError("CORP_ID environment variables must be set")
 
 # 通用函数：获取 access_token
-def get_access_token():
+def get_access_token(url):
     try:
-        response = requests.get(GET_ACCESS_TOKEN_URL)
+        response = requests.get(url)
         response.raise_for_status()
         token_data = response.json()
         access_token = token_data.get("access_token")
@@ -46,16 +37,23 @@ def call_wechat_api(url, payload):
 @app.route('/api/sendMsg', methods=['POST'])
 def send_message():
     try:
-        access_token = get_access_token()
+        # 获取查询参数
+        app_id = request.args.get('appId')
+        app_secret = request.args.get('appSecret')
+        if not app_id or not app_secret:
+            return jsonify({"error": "Missing appId or appSecret"}), 400
+        
+        # 获取 access_token 的 URL
+        get_access_token_url = f"https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid={CORP_ID}&corpsecret={app_secret}"
+        access_token = get_access_token(get_access_token_url)
+        
         payload = request.json
         if not payload:
             return jsonify({"error": "Invalid input"}), 400
         
-        # 构建 API URL
-        c_url = SEND_URL.format(access_token)
-        
         # 调用企业微信 API
-        response_data = call_wechat_api(c_url, payload)
+        send_msg_url = f"https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token={access_token}"
+        response_data = call_wechat_api(send_msg_url, payload)
         return jsonify(response_data)
     except RuntimeError as e:
         return jsonify({"error": str(e)}), 500

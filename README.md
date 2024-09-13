@@ -5,14 +5,12 @@
 ### 1. 部署方式
 docker run -d -p 8300:8300 \
   -e CORP_ID=your_corpid \
-  -e SECRET=your_secret \
   --name wxpush-proxy wxpush-proxy
 
 - CORP_ID: 企业微信的企业 ID
-- SECRET: 应用 Secret
 
 
 ### 2. 使用指南
 docker 部署完成后，提供调用接口：
-* url: POST http://ip:port/api/sendMsg
+* url: POST http://ip:port/api/sendMsg?appId={应用agentId}&appSecret={应用secret}
 * 请求体格式与 [发送应用消息](https://developer.work.weixin.qq.com/document/path/90236) 一致。
