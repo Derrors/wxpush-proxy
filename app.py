@@ -7,7 +7,6 @@ app = Flask(__name__)
 # 从环境变量中获取 corpid, corpsecret
 CORP_ID = os.getenv("CORP_ID", "")
 SECRET = os.getenv("SECRET", "")
-PORT = os.getenv("PORT", "8300")
 
 # 验证环境变量是否存在
 if not CORP_ID or not SECRET:
@@ -62,4 +61,4 @@ def send_message():
         return jsonify({"error": str(e)}), 500
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=int(PORT))
+    app.run(host='0.0.0.0', port=8300)
